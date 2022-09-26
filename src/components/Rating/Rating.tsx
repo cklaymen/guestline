@@ -15,7 +15,7 @@ const Rating: React.FC<RatingProps> = ({ rating, onChange }) => {
       {Array(5)
         .fill(null)
         .map((_, i) => (
-          <Star
+          <button
             key={i}
             onMouseEnter={() => onChange && setHovered(i)}
             onMouseLeave={() => onChange && setHovered(null)}
@@ -23,17 +23,20 @@ const Rating: React.FC<RatingProps> = ({ rating, onChange }) => {
             onClick={() =>
               onChange && onChange(rating !== i + 1 ? i + 1 : null)
             }
-            starProps={{
-              className:
-                hovered !== null && i <= hovered && rating && i < rating
-                  ? "fill-yellow-400"
-                  : hovered !== null && i <= hovered
-                  ? "fill-yellow-200"
-                  : rating && i < rating
-                  ? "fill-yellow-300"
-                  : undefined,
-            }}
-          />
+          >
+            <Star
+              starProps={{
+                className:
+                  hovered !== null && i <= hovered && rating && i < rating
+                    ? "fill-yellow-400"
+                    : hovered !== null && i <= hovered
+                    ? "fill-yellow-200"
+                    : rating && i < rating
+                    ? "fill-yellow-300"
+                    : undefined,
+              }}
+            />
+          </button>
         ))}
     </div>
   );
