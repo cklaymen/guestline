@@ -28,7 +28,7 @@ const HotelsList: React.FC = () => {
     <div className="flex flex-col items-center pt-6">
       <div className="flex flex-col gap-8 max-w-screen-md w-full">
         {hotels?.map((hotel) => (
-          <Hotel data={hotel} />
+          <Hotel key={hotel.id} data={hotel} />
         ))}
       </div>
     </div>

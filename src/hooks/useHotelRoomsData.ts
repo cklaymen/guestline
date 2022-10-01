@@ -1,6 +1,7 @@
 import useData, { UseDataResult } from "./useData";
 
 interface HotelRoomsData {
+  id: string;
   name: string;
   longDescription: string;
   occupancy: {

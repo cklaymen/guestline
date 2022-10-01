@@ -41,11 +41,15 @@ const Hotel: React.FC<{ data: HotelData }> = ({ data }) => {
         {error && "Something went wrong."}
         {roomsData?.map(
           ({
+            id,
             name,
             longDescription,
             occupancy: { maxAdults, maxChildren },
           }) => (
-            <div className="flex flex-row text-sm gap-4 border-2 border-solid border-slate-300 p-2 border-t-0">
+            <div
+              key={id}
+              className="flex flex-row text-sm gap-4 border-2 border-solid border-slate-300 p-2 border-t-0"
+            >
               <div className="w-40 p-2">
                 <div className="font-bold mb-1">{name}</div>
                 <div>Adults: {maxAdults}</div>
