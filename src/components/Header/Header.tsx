@@ -1,12 +1,11 @@
-import { useState } from "react";
+import useFilters from "../../hooks/useFilters/useFilters";
 
 import AmountField from "../AmountField/AmountField";
 import Rating from "../Rating/Rating";
 
 const Header: React.FC = () => {
-  const [rating, setRating] = useState<number | null>(null);
-  const [adults, setAdults] = useState<number>(1);
-  const [children, setChildren] = useState<number>(0);
+  const { rating, adults, children, setRating, setAdults, setChildren } =
+    useFilters();
 
   return (
     <header className="flex flex-col justify-center">

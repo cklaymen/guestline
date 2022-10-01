@@ -1,3 +1,6 @@
+import { useMemo } from "react";
+
+import useFilters from "../../hooks/useFilters/useFilters";
 import useHotelRoomsData from "../../hooks/useHotelRoomsData";
 import { HotelData } from "../../hooks/useHotelsData";
 import ImagesSlider from "../ImagesSlider";
@@ -5,8 +8,16 @@ import Rating from "../Rating/Rating";
 
 const Hotel: React.FC<{ data: HotelData }> = ({ data }) => {
   const { data: hotelData, loading, error } = useHotelRoomsData(data.id);
-
-  const roomsData = hotelData?.rooms;
+  const { adults, children } = useFilters();
+  const roomsData = useMemo(
+    () =>
+      hotelData?.rooms.filter(
+        (room) =>
+          room.occupancy.maxAdults >= adults &&
+          room.occupancy.maxChildren >= children
+      ),
+    [adults, children, hotelData]
+  );
 
   if (!loading && !roomsData?.length) {
     return null;
