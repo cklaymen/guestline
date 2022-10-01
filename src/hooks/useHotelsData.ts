@@ -1,4 +1,14 @@
-import useData, { UseDataResult } from "./useData";
+import useData from "./useData";
+
+interface HotelRoomsData {
+  id: string;
+  name: string;
+  longDescription: string;
+  occupancy: {
+    maxAdults: number;
+    maxChildren: number;
+  };
+}
 
 export interface HotelData {
   id: string;
@@ -8,20 +18,41 @@ export interface HotelData {
   address2: string;
   starRating: number;
   images: Array<{ url: string; alt?: string }>;
+  rooms: HotelRoomsData[];
 }
 
 interface ApiHotelData extends Omit<HotelData, "starRating"> {
   starRating: string;
 }
 
-const mapFn = (data: ApiHotelData[]): HotelData[] =>
+const mapHotelsFn = (data: ApiHotelData[]): Omit<HotelData, "rooms">[] =>
   data.map((hotel) => ({ ...hotel, starRating: Number(hotel.starRating) }));
 
-const useHotelsData = (): UseDataResult<HotelData[]> => {
-  return useData(
-    "https://obmng.dbm.guestline.net/api/hotels?collection-id=OBMNG",
-    mapFn
+const loadData = async () => {
+  const hotels = await fetch(
+    "https://obmng.dbm.guestline.net/api/hotels?collection-id=OBMNG"
+  )
+    .then((res) => res.json())
+    .then(mapHotelsFn);
+
+  const hotelsWithRooms = await Promise.all(
+    hotels.map<Promise<HotelData>>(async (hotel) => {
+      return {
+        ...hotel,
+        rooms: await fetch(
+          `https://obmng.dbm.guestline.net/api/roomRates/OBMNG/${hotel.id}`
+        )
+          .then((res) => res.json())
+          .then((data) => data.rooms),
+      };
+    })
   );
+
+  return hotelsWithRooms;
+};
+
+const useHotelsData = () => {
+  return useData(loadData);
 };
 
 export default useHotelsData;

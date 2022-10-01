@@ -6,13 +6,23 @@ import Hotel from "./Hotel";
 
 const HotelsList: React.FC = () => {
   const { data, loading, error } = useHotelsData();
-  const { rating } = useFilters();
+  const { rating, adults, children } = useFilters();
   const hotels = useMemo(
     () =>
-      rating !== null
+      (rating !== null
         ? data?.filter((hotel) => hotel.starRating >= rating)
-        : data,
-    [data, rating]
+        : data
+      )
+        ?.map((hotel) => ({
+          ...hotel,
+          rooms: hotel.rooms.filter(
+            (room) =>
+              room.occupancy.maxAdults >= adults &&
+              room.occupancy.maxChildren >= children
+          ),
+        }))
+        .filter((hotel) => hotel.rooms.length > 0),
+    [data, rating, adults, children]
   );
 
   if (loading) {

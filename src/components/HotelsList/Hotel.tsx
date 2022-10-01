@@ -1,28 +1,8 @@
-import { useMemo } from "react";
-
-import useFilters from "../../hooks/useFilters/useFilters";
-import useHotelRoomsData from "../../hooks/useHotelRoomsData";
 import { HotelData } from "../../hooks/useHotelsData";
 import ImagesSlider from "../ImagesSlider";
 import Rating from "../Rating/Rating";
 
 const Hotel: React.FC<{ data: HotelData }> = ({ data }) => {
-  const { data: hotelData, loading, error } = useHotelRoomsData(data.id);
-  const { adults, children } = useFilters();
-  const roomsData = useMemo(
-    () =>
-      hotelData?.rooms.filter(
-        (room) =>
-          room.occupancy.maxAdults >= adults &&
-          room.occupancy.maxChildren >= children
-      ),
-    [adults, children, hotelData]
-  );
-
-  if (!loading && !roomsData?.length) {
-    return null;
-  }
-
   return (
     <div>
       <div className="flex flex-row items-start justify-between border-2 border-solid border-slate-300 p-2 gap-4">
@@ -37,9 +17,7 @@ const Hotel: React.FC<{ data: HotelData }> = ({ data }) => {
         <Rating rating={data.starRating} />
       </div>
       <div>
-        {loading && "loading rooms data..."}
-        {error && "Something went wrong."}
-        {roomsData?.map(
+        {data.rooms.map(
           ({
             id,
             name,

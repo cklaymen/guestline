@@ -6,25 +6,25 @@ export interface UseDataResult<T> {
   error: boolean;
 }
 
-function useData<P, T>(url: string, mapFn?: (data: P) => T): UseDataResult<T> {
+function useData<T>(loadDataFn: () => Promise<T>): UseDataResult<T> {
   const [data, setData] = useState<T>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    async function loadData() {
+    async function fetchData() {
       setLoading(true);
       setError(false);
       try {
-        const response = await fetch(url);
-        setData(mapFn ? mapFn(await response.json()) : await response.json());
+        const response = await loadDataFn();
+        setData(response);
       } catch (err) {
         setError(true);
       }
       setLoading(false);
     }
-    loadData();
-  }, [url, mapFn]);
+    fetchData();
+  }, [loadDataFn]);
 
   return { data, loading, error };
 }
