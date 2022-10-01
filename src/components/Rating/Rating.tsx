@@ -19,7 +19,7 @@ const Rating: React.FC<RatingProps> = ({ rating, onChange }) => {
             key={i}
             onMouseEnter={() => onChange && setHovered(i)}
             onMouseLeave={() => onChange && setHovered(null)}
-            className={onChange && "cursor-pointer"}
+            className={onChange ? "cursor-pointer" : "cursor-auto"}
             onClick={() =>
               onChange && onChange(rating !== i + 1 ? i + 1 : null)
             }
