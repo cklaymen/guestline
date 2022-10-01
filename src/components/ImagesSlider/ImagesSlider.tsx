@@ -21,7 +21,7 @@ const ImagesSlider: React.FC<ImagesSliderProps> = ({ imagesUrl }) => {
         <LeftArrow />
       </button>
       <img
-        className="w-32 h-32 object-contain"
+        className="w-full h-full object-contain"
         src={imagesUrl[index].url}
         alt={imagesUrl[index].alt}
       />
