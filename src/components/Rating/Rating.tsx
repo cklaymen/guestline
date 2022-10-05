@@ -14,30 +14,38 @@ const Rating: React.FC<RatingProps> = ({ rating, onChange }) => {
     <div className="flex flex-row gap-0.5">
       {Array(5)
         .fill(null)
-        .map((_, i) => (
-          <button
-            key={i}
-            onMouseEnter={() => onChange && setHovered(i)}
-            onMouseLeave={() => onChange && setHovered(null)}
-            className={onChange ? "cursor-pointer" : "cursor-auto"}
-            onClick={() =>
-              onChange && onChange(rating !== i + 1 ? i + 1 : null)
-            }
-          >
+        .map((_, i) =>
+          onChange ? (
+            <button
+              key={i}
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
+              className={"cursor-pointer"}
+              onClick={() => onChange(rating !== i + 1 ? i + 1 : null)}
+            >
+              <Star
+                starProps={{
+                  className:
+                    hovered !== null && i <= hovered && rating && i < rating
+                      ? "fill-yellow-400"
+                      : hovered !== null && i <= hovered
+                      ? "fill-yellow-200"
+                      : rating && i < rating
+                      ? "fill-yellow-300"
+                      : undefined,
+                }}
+              />
+            </button>
+          ) : (
             <Star
+              key={i}
               starProps={{
                 className:
-                  hovered !== null && i <= hovered && rating && i < rating
-                    ? "fill-yellow-400"
-                    : hovered !== null && i <= hovered
-                    ? "fill-yellow-200"
-                    : rating && i < rating
-                    ? "fill-yellow-300"
-                    : undefined,
+                  (rating && i < rating && "fill-yellow-300") || undefined,
               }}
             />
-          </button>
-        ))}
+          )
+        )}
     </div>
   );
 };
